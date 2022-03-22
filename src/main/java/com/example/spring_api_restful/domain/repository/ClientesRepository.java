@@ -1,14 +1,16 @@
-package com.example.spring_api_restful.repository;
+package com.example.spring_api_restful.domain.repository;
 
-import entity.Cliente;
+import com.example.spring_api_restful.domain.entity.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ClientesRepository extends JpaRepository {
+@Repository
+public interface ClientesRepository extends JpaRepository<Cliente, Integer> {
 
     @Query(value = " select * from cliente c where c.nome like '%:nome%' ", nativeQuery = true)
     List<Cliente> encontrarPorNome(@Param("nome") String nome );

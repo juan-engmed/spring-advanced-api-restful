@@ -1,4 +1,4 @@
-package entity;
+package com.example.spring_api_restful.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 
@@ -18,10 +19,11 @@ import java.util.Set;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
+@Table( name = "cliente")
 public class Cliente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
