@@ -44,14 +44,14 @@ public class ProdutoController {
     @PutMapping("/{id}")
     public Produto updateProduct(@PathVariable("id") Integer id,
                                  @RequestBody Produto produto){
-        return produtosRepository.findById(id)
-                .map( produtoExistente -> {
-                    produto.setId(produtoExistente.getId());
-                    produtosRepository.save(produto);
-                    return produtoExistente;
-                }).orElseThrow(() -> new ResponseStatusException(
+        var produtoExistente = produtosRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Produto não encontrado."
                 ));
+
+        produto.setId(produtoExistente.getId());
+        produtosRepository.save(produto);
+        return produtoExistente;
     }
 
     @Transactional
@@ -62,7 +62,7 @@ public class ProdutoController {
                     produtosRepository.delete(produto);
                     return produto;
                 }).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Cliente não encontrado"));
+                        "Produto não encontrado"));
     }
 
     @GetMapping("/all")

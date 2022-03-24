@@ -14,9 +14,9 @@ import javax.persistence.Table;
 
 import java.math.BigDecimal;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "produto")
 public class Produto {
