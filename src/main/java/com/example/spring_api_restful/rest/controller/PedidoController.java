@@ -1,24 +1,20 @@
 package com.example.spring_api_restful.rest.controller;
 
-import com.example.spring_api_restful.domain.dto.InformacaoItemPedidoDTO;
-import com.example.spring_api_restful.domain.dto.InformacaoPedidoDTO;
-import com.example.spring_api_restful.domain.dto.PedidoDTO;
+import com.example.spring_api_restful.domain.enums.StatusPedido;
+import com.example.spring_api_restful.rest.controller.dto.AtualizacaoStatusDTO;
+import com.example.spring_api_restful.rest.controller.dto.InformacaoItemPedidoDTO;
+import com.example.spring_api_restful.rest.controller.dto.InformacaoPedidoDTO;
+import com.example.spring_api_restful.rest.controller.dto.PedidoDTO;
 import com.example.spring_api_restful.domain.entity.ItemPedido;
 import com.example.spring_api_restful.domain.entity.Pedido;
-import com.example.spring_api_restful.domain.entity.Produto;
-import com.example.spring_api_restful.domain.repository.ProdutosRepository;
 import com.example.spring_api_restful.service.PedidoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -54,12 +50,17 @@ public class PedidoController {
     }
 
     private InformacaoPedidoDTO converterPedido(Pedido pedido){
-        return InformacaoPedidoDTO.builder()
+        return InformacaoPedidoDTO
+                .builder()
                 .codigo(pedido.getId())
                 .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
                 .cpf(pedido.getCliente().getCpf())
                 .nomeCliente(pedido.getCliente().getNome())
                 .total(pedido.getTotal())
+                .statusPedido
+                        (pedido.getStatusPedido() == null
+                                ? "Sem status"
+                                : pedido.getStatusPedido().name())
                 .items(converterItens(pedido.getItens()))
                 .build();
     }
@@ -77,4 +78,13 @@ public class PedidoController {
                 ).collect(Collectors.toList());
     }
 
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateStatus(@PathVariable("id") Integer id,
+                             @RequestBody AtualizacaoStatusDTO dto){
+
+        String novoStatus = dto.getNovoStatus();
+        pedidoService.updateStatusPedido(id, StatusPedido.valueOf(novoStatus));
+
+    }
 }

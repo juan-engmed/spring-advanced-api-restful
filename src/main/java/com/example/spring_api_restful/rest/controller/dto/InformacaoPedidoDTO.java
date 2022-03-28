@@ -1,4 +1,4 @@
-package com.example.spring_api_restful.domain.dto;
+package com.example.spring_api_restful.rest.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +19,6 @@ public class InformacaoPedidoDTO {
     private String cpf;
     private BigDecimal total;
     private String dataPedido;
+    private String statusPedido;
     private List<InformacaoItemPedidoDTO> items;
 }
