@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,13 +38,13 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Produto addNewProduct(@RequestBody Produto produto){
+    public Produto addNewProduct(@RequestBody @Valid Produto produto){
         return produtosRepository.save(produto);
     }
 
     @PutMapping("/{id}")
     public Produto updateProduct(@PathVariable("id") Integer id,
-                                 @RequestBody Produto produto){
+                                 @RequestBody @Valid Produto produto){
         var produtoExistente = produtosRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Produto não encontrado."
